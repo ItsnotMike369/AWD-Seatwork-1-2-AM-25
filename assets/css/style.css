@@ -82,7 +82,7 @@
   }
     /* Showcase Section */
     section#showcase {
-      background: url('../img/Wallpaper.jpg') no-repeat center center/cover;
+      background: url('/assets/img/Wallpaper.jpg') no-repeat center center/cover;
       height: 50vh;
       position: relative;
       display: flex;
