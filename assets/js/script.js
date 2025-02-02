@@ -3,8 +3,9 @@ function toggleMenu() {
   navbarLinks.classList.toggle('active');
 }
 
-// Car Data
-const cars = [
+// Load cars from localStorage or use default data
+const storedCars = localStorage.getItem("cars");
+const cars = storedCars ? JSON.parse(storedCars) : [
   { id: 1, name: "Ferrari SF90 Spider", price: 350, seats: 2, doors: 2, type: "Auto", available: true, image: "./assets/img/Ferrari SF90 Spider.jpg" },
   { id: 2, name: "Lamborghini Aventador", price: 400, seats: 2, doors: 2, type: "Auto", available: true, image: "./assets/img/Lamborghini Aventador.jpg" },
   { id: 3, name: "Porsche 911 Turbo", price: 350, seats: 2, doors: 2, type: "Auto", available: true, image: "./assets/img/Porsche 911 Turbo.jpg" },
@@ -17,10 +18,23 @@ const cars = [
   { id: 10, name: "Tesla Model S", price: 400, seats: 4, doors: 4, type: "Electric", available: true, image: "./assets/img/Tesla Model S.jpg" },
 ];
 
- // Render Cars Function
- function renderCars() {
+// Load rental history from localStorage
+const rentalHistory = JSON.parse(localStorage.getItem("rentalHistory")) || [];
+
+// Save cars to localStorage
+function saveCarsToStorage() {
+  localStorage.setItem("cars", JSON.stringify(cars));
+}
+
+// Save rental history to localStorage
+function saveRentalHistory() {
+  localStorage.setItem("rentalHistory", JSON.stringify(rentalHistory));
+}
+
+// Render Cars Function
+function renderCars() {
   const carGrid = document.getElementById("car-grid");
-  carGrid.innerHTML = ""; // Clear existing content
+  carGrid.innerHTML = "";
   cars.forEach((car) => {
       const card = document.createElement("div");
       card.className = "card";
@@ -46,10 +60,13 @@ const cars = [
 
 // Function to Handle Renting a Car
 function rentCar(carId) {
-  const car = cars.find((c) => c.id === carId);
-  if (car && car.available) {
-      car.available = false; // Mark car as rented
-      alert(`You have successfully rented the ${car.name}.`);
+  const carIndex = cars.findIndex((c) => c.id === carId);
+  if (carIndex !== -1 && cars[carIndex].available) {
+      cars[carIndex].available = false; // Mark car as rented
+      rentalHistory.push({ carId: cars[carIndex].id, name: cars[carIndex].name, date: new Date().toLocaleString() });
+      saveCarsToStorage(); // Save state
+      saveRentalHistory(); // Save rental history
+      alert(`You have successfully rented the ${cars[carIndex].name}.`);
       renderCars(); // Refresh UI
   } else {
       alert("This car is not available.");
@@ -58,14 +75,20 @@ function rentCar(carId) {
 
 // Function to Cancel Car Rental
 function cancelRental(carId) {
-  const car = cars.find((c) => c.id === carId);
-  if (car && !car.available) {
-      car.available = true; // Make car available again
-      alert(`You have canceled the rental for ${car.name}.`);
+  const carIndex = cars.findIndex((c) => c.id === carId);
+  if (carIndex !== -1 && !cars[carIndex].available) {
+      cars[carIndex].available = true; // Make car available again
+      saveCarsToStorage(); // Save state
+      alert(`You have canceled the rental for ${cars[carIndex].name}.`);
       renderCars(); // Refresh UI
   } else {
       alert("This car is already available.");
   }
+}
+
+// Function to Display Rental History
+function displayRentalHistory() {
+  console.log("Rental History:", rentalHistory);
 }
 
 // Initial Render
