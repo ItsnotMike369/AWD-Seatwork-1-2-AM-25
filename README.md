@@ -74,4 +74,4 @@ AWD-Seatwork-1-2-MA-25
 | Bootstrap | bootstrap codes | https://getbootstrap.com/|
 | W3schools | html, css, json codes | https://www.w3schools.com/ |
 | Google | images, and backgrounds. | https://www.google.com/ |
-| Deployment Link | Published site link | https://itsnotmike369.github.io/AWD-Seatwork-1-2-MA-25/ |
+| Deployment Link | Published site link | https://itsnotmike369.github.io/AWD-Seatwork-1-2-AM-25/ |
